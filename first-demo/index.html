@@ -77,6 +77,10 @@
       <div>
         ----------------------------------------------------------------
       </div>
+      <!-- style 对象语法 -->
+      <div :style="{color:fontColor}">111111</div>
+      <div :style="objColor">222222</div>
+      <!-- style 数组语法 -->
       <div v-bind:style="[classObj,classObj2]">666</div>
     </div>
   </body>
@@ -113,6 +117,10 @@
       classObj2: {
         "font-weight": "bold",
       },
+      fontColor:"orange",
+      objColor:{
+        color:"green"
+      }
     },
     methods: {
       reverseMessageFunc: function () {
