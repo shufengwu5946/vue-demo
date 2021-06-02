@@ -10,6 +10,7 @@
     <!-- 提供这些功能以保持精简。这也可以让你自由选择自己更熟悉的工具。 -->
     <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css" />
   </head>
   <body>
     <div id="app">
@@ -81,7 +82,12 @@
       <div :style="{color:fontColor}">111111</div>
       <div :style="objColor">222222</div>
       <!-- style 数组语法 -->
-      <div v-bind:style="[classObj,classObj2]">666</div>
+      <div v-bind:style="[styleObj,styleObj2]">666</div>
+      <!-- class 对象语法 -->
+      <div v-bind:class="{red_color:true,font_bold:true}">测试class</div>
+      <div v-bind:class="classObj">测试class</div>
+      <!-- class 数组语法 -->
+      <div v-bind:class="[classObj,greenBg]">测试class</div>
     </div>
   </body>
 </html>
@@ -104,23 +110,31 @@
         { id: 3, text: "55555555555" },
       ],
       rawHtml: '<span style="color: red">This should be red.</span>',
-      isButtonDisabled: 0, //null, undefined, Number, String, Object, Symbol
+      // 只有null,undefined,false 为false，
+      isButtonDisabled: "", //null, undefined, Number, String, Object, Symbol
       attributename: "href",
       baiduUrl: "https://www.baidu.com",
       eventname: "click",
       question: "",
       answer: "I cannot give you an answer until you ask a question!",
-      classObj: {
+      styleObj: {
         color: "#00adef",
         "background-color": "yellow",
       },
-      classObj2: {
+      styleObj2: {
         "font-weight": "bold",
       },
-      fontColor:"orange",
-      objColor:{
-        color:"green"
-      }
+      fontColor: "orange",
+      objColor: {
+        color: "green",
+      },
+      classObj: {
+        red_color: true,
+        font_bold: false,
+      },
+      greenBg: {
+        green_bg: true,
+      },
     },
     methods: {
       reverseMessageFunc: function () {
