@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://unpkg.com/vue@3.0.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
   </head>
   <body>
     <div id="root">
@@ -40,6 +41,135 @@
           v-bind:key="item.id"
         ></todo-item2>
       </ol>
+      <div>
+        <!-- v-once -->
+        <span v-once>这个将不会改变: {{ counter }}</span>
+      </div>
+      <p>Using mustaches: {{ rawHtml }}</p>
+      <!-- v-html -->
+      <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+      <!-- 
+        如果绑定的值是 null 或 undefined，那么该 attribute 将不会被包含在渲染的元素上。
+        除 false、0、""、null、undefined 和 NaN 以外皆为truthy真值
+        如果 isButtonDisabled 的值是 truthy[1]，那么 disabled attribute 将被包含在内
+        如果该值是一个空字符串，它也会被包括在内，与 <button disabled=""> 保持一致。
+        对于其他错误的值，该 attribute 将被省略。
+      -->
+      <button v-bind:disabled="isButtonDisabled">按钮</button>
+      <br />
+      <!-- 动态参数 -->
+      <button v-on:[eventname]="reverseMessage">反转 Message</button>
+      <br />
+      <button v-bind:[attributename]="isButtonDisabled">按钮</button>
+      <br />
+      <!-- 缩写 -->
+      <button @[eventname]="reverseMessage">反转 Message</button>
+      <br />
+      <button :[attributename]="isButtonDisabled">按钮</button>
+      <br />
+      <div>
+        -------------------------------计算属性----------------------------------
+      </div>
+      <p>Has published books:</p>
+      <span>{{ publishedBooksMessage }}</span>
+
+      <div>
+        -------------------------------watch----------------------------------
+      </div>
+      <p>
+        Ask a yes/no question:
+        <input v-model="question" />
+      </p>
+      <p>{{ answer }}</p>
+      <!-- 绑定class -->
+      <div>
+        -------------------------------绑定class----------------------------------
+      </div>
+      <div class="static" v-bind:class="classObj">绑定class</div>
+      <div>
+        -------------------------------绑定style----------------------------------
+      </div>
+      <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">
+        绑定style
+      </div>
+      <div v-bind:style="styleObject">绑定style2</div>
+      <!-- 条件渲染 -->
+      <h1 v-if="awesome">Vue is awesome!</h1>
+      <h1 v-else>Oh no 😢</h1>
+      <template v-if="ok">
+        <h1>Title</h1>
+        <p>Paragraph 1</p>
+        <p>Paragraph 2</p>
+      </template>
+      <!-- 在 v-for 里使用对象 -->
+      <ul>
+        <li v-for="value in object">{{ value }}</li>
+      </ul>
+      <br />
+      <div v-for="(value, name) in object">{{ name }}: {{ value }}</div>
+      <br />
+      <div v-for="(value, name, index) in object" :key="value">
+        {{ index }}. {{ name }}: {{ value }}
+      </div>
+      <ul>
+        <li v-for="n in evenNumbers">{{ n }}</li>
+      </ul>
+      <input type="checkbox" id="checkbox" v-model="checked" />
+      <label for="checkbox">{{ checked }}</label>
+      <div>
+        -------------------------------------多选按钮-------------------------------------
+      </div>
+      <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
+      <label for="jack">Jack</label>
+      <input type="checkbox" id="john" value="John" v-model="checkedNames" />
+      <label for="john">John</label>
+      <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
+      <label for="mike">Mike</label>
+      <br />
+      <span>Checked names: {{ checkedNames }}</span>
+
+      <div>
+        ----------------------------------单选按钮-------------------------------------
+      </div>
+      <input type="radio" id="one" value="One" v-model="picked" />
+      <label for="one">One</label>
+      <br />
+      <input type="radio" id="two" value="Two" v-model="picked" />
+      <label for="two">Two</label>
+      <br />
+      <span>Picked: {{ picked }}</span>
+
+      <div>
+        ---------------------------------单选框----------------------------------
+      </div>
+      <select v-model="selected">
+        <option disabled value="">请选择</option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+      </select>
+      <span>Selected: {{ selected }}</span>
+
+      <div>
+        -----------------------------多选框----------------------------------
+      </div>
+      <select v-model="selecteds" multiple style="width: 50px">
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+      </select>
+      <br />
+      <span>Selected: {{ selecteds }}</span>
+
+      <div>
+        -------------------------------复选框---------------------------------
+      </div>
+      <input
+        type="checkbox"
+        v-model="toggle"
+        true-value="yes"
+        false-value="no"
+      />
     </div>
   </body>
   <script>
@@ -49,7 +179,7 @@
           counter: 0,
           message: "You loaded this page on " + new Date().toLocaleString(),
           message2: "You loaded this page on ",
-          seen: false,
+          seen: true,
           todos: [
             { text: "Learn JavaScript" },
             { text: "Learn Vue" },
@@ -60,7 +190,48 @@
             { id: 2, text: "Learn Vue" },
             { id: 3, text: "Build something awesome" },
           ],
+          rawHtml: "<span>rawHtml content</span>",
+          isButtonDisabled: true,
+          eventname: "click",
+          attributename: "disabled",
+          author: {
+            name: "John Doe",
+            books: [
+              "Vue 2 - Advanced Guide",
+              "Vue 3 - Basic Guide",
+              "Vue 4 - The Mystery",
+            ],
+          },
+          question: "",
+          answer: "Questions usually contain a question mark. ;-)",
+          classObj: {
+            isActive: true,
+            hasError: false,
+          },
+          activeColor: "red",
+          fontSize: 30,
+          styleObject: {
+            color: "green",
+            fontSize: "30px",
+          },
+          awesome: true,
+          ok: true,
+          object: {
+            title: "How to do lists in Vue",
+            author: "Jane Doe",
+            publishedAt: "2016-04-10",
+          },
+          numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+          checked: false,
+          checkedNames: [],
+          picked: "One",
+          selected: "",
+          selecteds: [],
+          // toggle: "",
         };
+      },
+      created() {
+        console.log("created");
       },
       mounted() {
         setInterval(() => {
@@ -71,17 +242,49 @@
         reverseMessage() {
           this.message2 = this.message2.split("").reverse().join("");
         },
+        getAnswer() {
+          this.answer = "Thinking...";
+          axios
+            .get("https://yesno.wtf/api")
+            .then((response) => {
+              this.answer = response.data.answer;
+            })
+            .catch((error) => {
+              this.answer = "Error! Could not reach the API. " + error;
+            });
+        },
+      },
+      computed: {
+        // 计算属性的 getter
+        publishedBooksMessage() {
+          // `this` 指向 vm 实例
+          return this.author.books.length > 0 ? "Yes" : "No";
+        },
+        evenNumbers() {
+          return this.numbers.filter(function (number) {
+            return number % 2 === 0;
+          });
+        },
+      },
+      watch: {
+        // whenever question changes, this function will run
+        question(newQuestion, oldQuestion) {
+          console.log("question change");
+          if (newQuestion.indexOf("?") > -1) {
+            this.getAnswer();
+          }
+        },
       },
     };
 
-    let app = Vue.createApp(Root);
-    app.component("todo-item", {
+    let vm = Vue.createApp(Root);
+    vm.component("todo-item", {
       template: `<li>skdfklajklfkl</li>`,
     });
-    app.component("todo-item2", {
+    vm.component("todo-item2", {
       props: ["todo"],
       template: `<li>{{todo.text}}</li>`,
     });
-    app.mount("#root");
+    vm.mount("#root");
   </script>
 </html>
